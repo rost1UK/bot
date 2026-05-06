@@ -3,24 +3,25 @@ import random
 import string
 import os
 
-# ←←← ВСТАВЬ СВОЙ ТОКЕН СЮДА ←←←
-TOKEN = "8763070059:AAEEwrgXTv4Rv0QgppLyG4hX0g9EDt7N4Nw" 
+TOKEN = os.getenv("TOKEN")
+if not TOKEN:
+    raise ValueError("❌ TOKEN не найден! Добавь переменную TOKEN в Variables.")
 
 bot = telebot.TeleBot(TOKEN)
 
-FIRST_LETTER = "X"
+FIRST_LETTER = os.getenv("FIRST_LETTER", "X")
 LETTERS = string.ascii_uppercase
 user_first = {}
 
 @bot.message_handler(commands=['start'])
 def start(message):
     user_first[message.from_user.id] = True
-    bot.send_message(message.chat.id, 
+    bot.send_message(message.chat.id,
         f"🔥 <b>English Uppercase Bot</b> 🔥\n\n"
         f"Первая буква: <b>{FIRST_LETTER}</b>\n"
         f"/letter — одна буква\n"
         f"/string 30 — строка\n"
-        f"/setfirst Z — сменить первую",
+        f"/setfirst Z — сменить",
         parse_mode='HTML')
 
 @bot.message_handler(commands=['letter'])
@@ -41,5 +42,16 @@ def string_cmd(message):
     text = ''.join(random.choice(LETTERS) for _ in range(n))
     bot.send_message(message.chat.id, f"📜 <b>{text}</b>")
 
-print("Бот запущен...")
+@bot.message_handler(commands=['setfirst'])
+def setfirst(message):
+    try:
+        new = message.text.split()[1][0].upper()
+        if new in LETTERS:
+            global FIRST_LETTER
+            FIRST_LETTER = new
+            bot.reply_to(message, f"✅ Первая буква теперь <b>{FIRST_LETTER}</b>")
+    except:
+        bot.reply_to(message, "Пример: /setfirst A")
+
+print("🚀 Бот запущен на Railway")
 bot.infinity_polling()
