@@ -1,27 +1,24 @@
 import telebot
 import random
 import string
-import os
 
-TOKEN = os.getenv("TOKEN")
-if not TOKEN:
-    raise ValueError("❌ Добавь TOKEN в Variables на Railway!")
+TOKEN = "ВСТАВЬ_СВОЙ_ТОКЕН_СЮДА"
 
 bot = telebot.TeleBot(TOKEN)
 
-FIRST_LETTER = os.getenv("FIRST_LETTER", "X")
+FIRST_LETTER = "X"
 LETTERS = string.ascii_uppercase
 user_first = {}
 
 @bot.message_handler(commands=['start'])
 def start(message):
     user_first[message.from_user.id] = True
-    bot.send_message(message.chat.id,
+    bot.send_message(message.chat.id, 
         f"🔥 <b>English Uppercase Bot</b> 🔥\n\n"
         f"Первая буква: <b>{FIRST_LETTER}</b>\n"
         f"/letter — одна буква\n"
         f"/string 30 — строка\n"
-        f"/setfirst Z — сменить первую",
+        f"/setfirst Z — сменить",
         parse_mode='HTML')
 
 @bot.message_handler(commands=['letter'])
@@ -53,5 +50,5 @@ def setfirst(message):
     except:
         bot.reply_to(message, "Пример: /setfirst A")
 
-print("🚀 Бот запущен на Railway")
+print("Бот запущен на Replit...")
 bot.infinity_polling()
