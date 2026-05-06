@@ -5,7 +5,7 @@ import os
 
 TOKEN = os.getenv("TOKEN")
 if not TOKEN:
-    raise ValueError("❌ TOKEN не найден! Добавь переменную TOKEN в Variables.")
+    raise ValueError("❌ Добавь TOKEN в Variables на Railway!")
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -21,7 +21,7 @@ def start(message):
         f"Первая буква: <b>{FIRST_LETTER}</b>\n"
         f"/letter — одна буква\n"
         f"/string 30 — строка\n"
-        f"/setfirst Z — сменить",
+        f"/setfirst Z — сменить первую",
         parse_mode='HTML')
 
 @bot.message_handler(commands=['letter'])
